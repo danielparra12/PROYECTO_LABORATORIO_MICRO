@@ -105,7 +105,7 @@ int main(void)
 
 
   float V2;
-  a=0.000805;
+  a=0.000805; //Constante para transformar el voltaje obtenido en el ADC
 
   /* USER CODE END 2 */
 
@@ -122,44 +122,44 @@ int main(void)
 
 	  //END ADC
 
+      //Voltaje obtenido no filtrado
 
-	  V1= raw_data*a;
+	     V1= raw_data*a;
+	  //MEAN AVERAGE FILTER
+
 	     A4=A3;
 	 	 A3=A2;
 	 	 A2=A1;
 	 	 A1=V1;
-	 V2 = (A1+A2+A3+A4)/N;
+	     V2 = (A1+A2+A3+A4)/N;
+	 //End filter
 
-	  //for loop
+	 //LCD
 
-	  	  lcd_clear();   //THIS FUNCTION CLEAR THE LCD AND
-	  	  HAL_Delay(1000);
-	  	  lcd_init ();	//INITIALIZE THE LCD (** if the LCD is cleared, you need to initialize it again ***)
+	  	    lcd_clear();   //THIS FUNCTION CLEAR THE LCD AND
+	  	    HAL_Delay(1000);
+	  	    lcd_init ();	//INITIALIZE THE LCD (** if the LCD is cleared, you need to initialize it again ***)
 
-	  	  lcd_put_cur(0,0);
-	  	  HAL_Delay(10);
+	  	    lcd_put_cur(0,0); //posicion
+	  	    HAL_Delay(10);
 
-	  	  lcd_send_string ("VOLTAJE [V]");
+	  	    lcd_send_string ("VOLTAJE [V]");
+
+	  	  //Voltaje no filtrado emitido en el LCD
+
+	  	   gcvt(V1, 4, voltajepalabra); //convierte el voltaje obtenido en palabra para ser leida en el LCD
+
+	  	   lcd_put_cur(1,2); //posicion
+	  	   lcd_send_string (voltajepalabra);//palabra a emitir
+
+	  	//Voltaje filtrado emitido en el LCD
+
+	  	   gcvt(V2, 4, voltajepalabra2);
+	  	   lcd_put_cur(1,8);
+	  	   lcd_send_string (voltajepalabra2);
+	  	   HAL_Delay(1000);
 
 
-	  	gcvt(V1, 4, voltajepalabra);
-	  	lcd_put_cur(1,2);
-	  	lcd_send_string (voltajepalabra);
-
-	  	gcvt(V2, 4, voltajepalabra2);
-	  	lcd_put_cur(1,8);
-	  	lcd_send_string (voltajepalabra2);
-	  	HAL_Delay(1000);
-
-
-//	  	  for ( int i = 0; i <= 10; i++ ) {
-//
-//	  		  sprintf(number,"%d", i); //INT TO STRING
-//	  		  //gcvt(n, 6, res);		 	// float to str
-//
-//	  		  lcd_put_cur(1,2);
-//	  		  lcd_send_string (number);
-//	  		  HAL_Delay(1000);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
